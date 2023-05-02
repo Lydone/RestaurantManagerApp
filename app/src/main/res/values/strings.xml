@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">RestaurantManagerApp</string>
+    <string name="destination_dishes">Блюда</string>
+    <string name="destination_categories">Категории</string>
+    <string name="label_search">Поиск</string>
+    <string name="weight_price_placeholder">%s, %d г, %d ₽</string>
+    <string name="name">Название</string>
+    <string name="description">Описание</string>
+    <string name="price">Цена</string>
+    <string name="weight">Вес</string>
+    <string name="pick_image">Выберите изображение</string>
+    <string name="add_dish">Добавить блюдо</string>
+    <string name="category">Категория</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="delete_dish_placeholder">Удалить блюдо \"%s\"?</string>
+    <string name="delete_category_placeholder">Удалить категорию \"%s\"?</string>
+    <string name="add_category">Добавить категорию</string>
+</resources>
