@@ -2,6 +2,7 @@
     <string name="app_name">RestaurantManagerApp</string>
     <string name="destination_dishes">Блюда</string>
     <string name="destination_categories">Категории</string>
+    <string name="destination_tables">Столы</string>
     <string name="label_search">Поиск</string>
     <string name="weight_price_placeholder">%s, %d г, %d ₽</string>
     <string name="name">Название</string>
@@ -15,5 +16,11 @@
     <string name="no">Нет</string>
     <string name="delete_dish_placeholder">Удалить блюдо \"%s\"?</string>
     <string name="delete_category_placeholder">Удалить категорию \"%s\"?</string>
+    <string name="delete_category_warning">Это также приведет к удалению всех блюд данной категории</string>
     <string name="add_category">Добавить категорию</string>
+    <string name="table_placeholder">Стол №%d</string>
+    <string name="delete_table_placeholder">Удалить стол №%d?</string>
+    <string name="table_number">Номер стола</string>
+    <string name="add_table">Добавить стол</string>
+
 </resources>

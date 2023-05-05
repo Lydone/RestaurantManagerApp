@@ -22,7 +22,11 @@ import androidx.navigation.compose.rememberNavController
 fun RestaurantCookApp() {
     val navController = rememberNavController()
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination
-    val destinations = listOf(TopLevelDestination.DISHES, TopLevelDestination.CATEGORIES)
+    val destinations = listOf(
+        TopLevelDestination.DISHES,
+        TopLevelDestination.CATEGORIES,
+        TopLevelDestination.TABLES,
+    )
     Scaffold {
         Row(Modifier.padding(it)) {
             NavigationRail {

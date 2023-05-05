@@ -39,4 +39,13 @@ interface ApiService {
 
     @DELETE("account/{login}")
     suspend fun deleteAccount(@Path("login") login: String)
+
+    @GET("table")
+    suspend fun getTables(): List<Table>
+
+    @DELETE("table/{number}")
+    suspend fun deleteTable(@Path("number") number: Int)
+
+    @POST("table/{number}")
+    suspend fun addTable(@Path("number") number: Int)
 }

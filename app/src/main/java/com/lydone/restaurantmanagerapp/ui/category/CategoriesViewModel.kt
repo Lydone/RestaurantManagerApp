@@ -36,6 +36,7 @@ class CategoriesViewModel @Inject constructor(private val menuRepository: MenuRe
     fun changeName(value: String) = _state.update { it.copy(name = value) }
 
     private suspend fun loadCategories() {
+        _state.update { it.copy(categories = null) }
         _state.update { it.copy(categories = menuRepository.getCategories()) }
     }
 

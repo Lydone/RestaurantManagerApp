@@ -1,18 +1,15 @@
 package com.lydone.restaurantmanagerapp.ui.category
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,11 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lydone.restaurantmanagerapp.R
 import com.lydone.restaurantmanagerapp.data.Category
 import com.lydone.restaurantmanagerapp.ui.AlertDialog
+import com.lydone.restaurantmanagerapp.ui.DefaultLazyColumn
+import com.lydone.restaurantmanagerapp.ui.FullscreenCircularProgressIndicator
 import com.lydone.restaurantmanagerapp.ui.TwoPaneScreen
 
 @Composable
@@ -50,6 +50,7 @@ fun CategoriesRoute(viewModel: CategoriesViewModel = hiltViewModel()) {
             title = stringResource(R.string.delete_category_placeholder, category.name),
             onDismiss = { deleteCategoryDialog = null },
             onConfirm = { viewModel.deleteCategory(category) },
+            text = stringResource(R.string.delete_category_warning),
         )
     }
 }
@@ -70,9 +71,11 @@ private fun Screen(
                     value = state.name,
                     onValueChange = onNameChange,
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text(stringResource(R.string.name)) }
+                    label = { Text(stringResource(R.string.name)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(KeyboardCapitalization.Sentences),
                 )
-                Button(onAddCategory, Modifier.fillMaxWidth()) {
+                Button(onAddCategory, Modifier.fillMaxWidth(), enabled = state.name.isNotEmpty()) {
                     Text(stringResource(R.string.add_category))
                 }
             }
@@ -81,18 +84,16 @@ private fun Screen(
 }
 
 @Composable
-private fun BoxScope.Categories(
+private fun Categories(
     state: CategoriesViewModel.State,
     onDeleteCategory: (Category) -> Unit
 ) {
     if (state.categories != null) {
-        LazyColumn(
-            Modifier.padding(horizontal = 16.dp),
-            contentPadding = PaddingValues(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) { items(state.categories) { Category(it, onDelete = { onDeleteCategory(it) }) } }
+        DefaultLazyColumn {
+            items(state.categories) { Category(it, onDelete = { onDeleteCategory(it) }) }
+        }
     } else {
-        CircularProgressIndicator(Modifier.align(Alignment.Center))
+        FullscreenCircularProgressIndicator()
     }
 }
 
