@@ -26,6 +26,7 @@ fun RestaurantCookApp() {
         TopLevelDestination.DISHES,
         TopLevelDestination.CATEGORIES,
         TopLevelDestination.TABLES,
+        TopLevelDestination.ACCOUNTS,
     )
     Scaffold {
         Row(Modifier.padding(it)) {

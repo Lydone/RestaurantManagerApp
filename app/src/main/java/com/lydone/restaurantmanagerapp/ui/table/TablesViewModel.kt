@@ -35,6 +35,7 @@ class TablesViewModel @Inject constructor(private val tableRepository: TableRepo
 
     fun addTable() = viewModelScope.launch {
         tableRepository.addTable(state.value.number.toInt())
+        _state.update { it.copy(number = "") }
         loadTables()
     }
 

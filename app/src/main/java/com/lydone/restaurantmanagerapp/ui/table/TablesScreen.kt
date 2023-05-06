@@ -99,7 +99,9 @@ private fun AddTable(
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
     )
-    Button(onAddTableClick, Modifier.fillMaxWidth()) { Text(stringResource(R.string.add_table)) }
+    Button(onAddTableClick, Modifier.fillMaxWidth(), enabled = state.number.isNotEmpty()) {
+        Text(stringResource(R.string.add_table))
+    }
 }
 
 @Composable

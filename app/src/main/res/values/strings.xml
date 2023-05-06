@@ -3,6 +3,7 @@
     <string name="destination_dishes">Блюда</string>
     <string name="destination_categories">Категории</string>
     <string name="destination_tables">Столы</string>
+    <string name="destination_accounts">Аккаунты</string>
     <string name="label_search">Поиск</string>
     <string name="weight_price_placeholder">%s, %d г, %d ₽</string>
     <string name="name">Название</string>
@@ -22,5 +23,14 @@
     <string name="delete_table_placeholder">Удалить стол №%d?</string>
     <string name="table_number">Номер стола</string>
     <string name="add_table">Добавить стол</string>
+    <string name="delete_account_placeholder">Удалить аккаунт \"%s\"?</string>
+    <string name="role_waiter">Официант</string>
+    <string name="role_cook">Повар</string>
+    <string name="role_manager">Администратор</string>
+    <string name="account_name">Имя</string>
+    <string name="login">Логин</string>
+    <string name="pin_code">Пин-код</string>
+    <string name="role">Роль</string>
+    <string name="add_account">Добавить аккаунт</string>
 
 </resources>
