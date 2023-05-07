@@ -56,6 +56,7 @@ class AccountsViewModel @Inject constructor(private val repository: AccountRepos
         val password: String,
         val role: Account.Role,
     ) {
+        val roles = Account.Role.values()
         val canAddAccount = name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()
     }
 }

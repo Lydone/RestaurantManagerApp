@@ -23,9 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -56,6 +54,7 @@ import com.lydone.restaurantmanagerapp.R
 import com.lydone.restaurantmanagerapp.data.Category
 import com.lydone.restaurantmanagerapp.data.Dish
 import com.lydone.restaurantmanagerapp.ui.AlertDialog
+import com.lydone.restaurantmanagerapp.ui.ExposedDropdownMenu
 import com.lydone.restaurantmanagerapp.ui.TwoPaneScreen
 
 @Composable
@@ -81,7 +80,7 @@ fun DishesRoute(viewModel: DishesViewModel = hiltViewModel()) {
             onConfirm = { viewModel.deleteDish(dish) }
         )
     }
-    LaunchedEffect(Unit) {viewModel.updateData() }
+    LaunchedEffect(Unit) { viewModel.updateData() }
 }
 
 @Composable
@@ -215,54 +214,16 @@ private fun AddDish(
                 keyboardOptions = numberKeyboardOptions,
                 singleLine = true,
             )
-            CategoryPicker(state.category, state.categories, onCategoryChange)
+            ExposedDropdownMenu(
+                items = state.categories.orEmpty().map(Category::name),
+                selectedItemIndex = state.categories?.indexOf(state.category),
+                label = stringResource(R.string.category),
+                onItemSelect = { onCategoryChange(state.categories!![it]) }
+            )
         }
     }
     Button(onClick = onAddDish, Modifier.fillMaxWidth(), enabled = state.canAddDish) {
         Text(stringResource(R.string.add_dish))
-    }
-}
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun CategoryPicker(
-    category: Category?,
-    categories: List<Category>?,
-    onCategoryChange: (Category) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(expanded, onExpandedChange = { expanded = it }) {
-        OutlinedTextField(value = category?.name.orEmpty(),
-            onValueChange = {},
-            Modifier
-                .menuAnchor()
-                .fillMaxWidth(),
-            readOnly = true,
-            label = { Text(stringResource(R.string.category)) },
-            trailingIcon = {
-                Icon(
-                    painterResource(
-                        if (expanded) {
-                            R.drawable.baseline_arrow_drop_up_24
-                        } else {
-                            R.drawable.baseline_arrow_drop_down_24
-                        }
-                    ),
-                    contentDescription = null,
-                )
-            }
-        )
-        ExposedDropdownMenu(expanded, onDismissRequest = { expanded = false }) {
-            categories.orEmpty().forEach { category ->
-                DropdownMenuItem(
-                    text = { Text(category.name) },
-                    onClick = {
-                        onCategoryChange(category)
-                        expanded = false
-                    }
-                )
-            }
-        }
     }
 }
 

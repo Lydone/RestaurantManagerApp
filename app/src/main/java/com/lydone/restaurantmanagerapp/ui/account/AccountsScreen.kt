@@ -10,9 +10,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,6 +34,7 @@ import com.lydone.restaurantmanagerapp.R
 import com.lydone.restaurantmanagerapp.data.Account
 import com.lydone.restaurantmanagerapp.ui.AlertDialog
 import com.lydone.restaurantmanagerapp.ui.DefaultLazyColumn
+import com.lydone.restaurantmanagerapp.ui.ExposedDropdownMenu
 import com.lydone.restaurantmanagerapp.ui.FullscreenCircularProgressIndicator
 import com.lydone.restaurantmanagerapp.ui.TwoPaneScreen
 
@@ -117,7 +115,12 @@ private fun AddAccount(
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
     )
-    RolePicker(state.role, onRoleChange = onRoleChange)
+    ExposedDropdownMenu(
+        items = state.roles.map { stringResource(it) },
+        selectedItemIndex = state.roles.indexOf(state.role),
+        label = stringResource(R.string.role),
+        onItemSelect = { onRoleChange(state.roles[it]) },
+    )
     Button(onAddAccountClick, Modifier.fillMaxWidth(), enabled = state.canAddAccount) {
         Text(stringResource(R.string.add_account))
     }
@@ -132,49 +135,6 @@ private fun Account(account: Account, onDeleteClick: () -> Unit) = OutlinedCard 
             Text(account.login, style = MaterialTheme.typography.labelLarge)
         }
         IconButton(onDeleteClick) { Icon(Icons.Default.Delete, contentDescription = null) }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun RolePicker(
-    role: Account.Role,
-    onRoleChange: (Account.Role) -> Unit,
-) {
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(expanded, onExpandedChange = { expanded = it }) {
-        OutlinedTextField(
-            value = stringResource(role),
-            onValueChange = {},
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth(),
-            readOnly = true,
-            label = { Text(stringResource(R.string.role)) },
-            trailingIcon = {
-                Icon(
-                    painterResource(
-                        if (expanded) {
-                            R.drawable.baseline_arrow_drop_up_24
-                        } else {
-                            R.drawable.baseline_arrow_drop_down_24
-                        }
-                    ),
-                    contentDescription = null,
-                )
-            }
-        )
-        ExposedDropdownMenu(expanded, onDismissRequest = { expanded = false }) {
-            Account.Role.values().forEach { role ->
-                DropdownMenuItem(
-                    text = { Text(stringResource(role)) },
-                    onClick = {
-                        onRoleChange(role)
-                        expanded = false
-                    }
-                )
-            }
-        }
     }
 }
 

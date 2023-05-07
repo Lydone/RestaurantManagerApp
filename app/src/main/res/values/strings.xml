@@ -4,6 +4,7 @@
     <string name="destination_categories">Категории</string>
     <string name="destination_tables">Столы</string>
     <string name="destination_accounts">Аккаунты</string>
+    <string name="destination_orders">Заказы</string>
     <string name="label_search">Поиск</string>
     <string name="weight_price_placeholder">%s, %d г, %d ₽</string>
     <string name="name">Название</string>
@@ -32,5 +33,14 @@
     <string name="pin_code">Пин-код</string>
     <string name="role">Роль</string>
     <string name="add_account">Добавить аккаунт</string>
-
+    <string name="order_placeholder">Заказ №%d</string>
+    <string name="order_closed_placeholder">Закрыт %s</string>
+    <string name="active_order">Активный</string>
+    <string name="status_instant_placeholder">%s, %s</string>
+    <string name="date_time_pattern">d MMMM в HH:mm</string>
+    <string name="status_time_placeholder">%s, %s</string>
+    <string name="status_queue">В очереди</string>
+    <string name="status_cooking">Готовится</string>
+    <string name="status_ready">Готов</string>
+    <string name="delete_entry_placeholder">Удалить из заказа блюдо \"%s\"?</string>
 </resources>

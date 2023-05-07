@@ -48,4 +48,10 @@ interface ApiService {
 
     @POST("table/{number}")
     suspend fun addTable(@Path("number") number: Int)
+
+    @GET("order/all_table/{table}")
+    suspend fun getOrders(@Path("table") table: Int): List<Order>
+
+    @DELETE("order/entry/{id}")
+    suspend fun deleteOrderEntry(@Path("id") id: Int)
 }
