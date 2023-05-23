@@ -1,5 +1,6 @@
 package com.lydone.restaurantmanagerapp.ui.category
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lydone.restaurantmanagerapp.data.Category
@@ -23,21 +24,33 @@ class CategoriesViewModel @Inject constructor(private val menuRepository: MenuRe
     }
 
     fun deleteCategory(category: Category) = viewModelScope.launch {
-        menuRepository.deleteCategory(category.id)
-        loadCategories()
+        try {
+            menuRepository.deleteCategory(category.id)
+            loadCategories()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     fun addCategory() = viewModelScope.launch {
-        menuRepository.addCategory(state.value.name)
-        _state.update { it.copy(name = "") }
-        loadCategories()
+        try {
+            menuRepository.addCategory(state.value.name)
+            _state.update { it.copy(name = "") }
+            loadCategories()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     fun changeName(value: String) = _state.update { it.copy(name = value) }
 
     private suspend fun loadCategories() {
         _state.update { it.copy(categories = null) }
-        _state.update { it.copy(categories = menuRepository.getCategories()) }
+        try {
+            _state.update { it.copy(categories = menuRepository.getCategories()) }
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     data class State(

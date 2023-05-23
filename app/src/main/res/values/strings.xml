@@ -43,4 +43,7 @@
     <string name="status_cooking">Готовится</string>
     <string name="status_ready">Готов</string>
     <string name="delete_entry_placeholder">Удалить из заказа блюдо \"%s\"?</string>
+    <string name="delete_order_placeholder">Удалить заказ №%d?</string>
+    <string name="error">Произошла ошибка</string>
+    <string name="repeat">Повторить</string>
 </resources>

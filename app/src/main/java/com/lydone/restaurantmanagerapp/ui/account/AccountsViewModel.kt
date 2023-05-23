@@ -1,5 +1,6 @@
 package com.lydone.restaurantmanagerapp.ui.account
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lydone.restaurantmanagerapp.data.Account
@@ -25,8 +26,12 @@ class AccountsViewModel @Inject constructor(private val repository: AccountRepos
     }
 
     fun deleteAccount(account: Account) = viewModelScope.launch {
-        repository.deleteAccount(account.login)
-        loadAccounts()
+        try {
+            repository.deleteAccount(account.login)
+            loadAccounts()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
 
     }
 
@@ -39,14 +44,22 @@ class AccountsViewModel @Inject constructor(private val repository: AccountRepos
     fun changeRole(value: Account.Role) = _state.update { it.copy(role = value) }
 
     fun addAccount() = viewModelScope.launch {
-        repository.addAccount(with(state.value) { Account(name, login, password, role) })
-        _state.update { it.copy(name = "", login = "", password = "") }
-        loadAccounts()
+        try {
+            repository.addAccount(with(state.value) { Account(name, login, password, role) })
+            _state.update { it.copy(name = "", login = "", password = "") }
+            loadAccounts()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     private suspend fun loadAccounts() {
         _state.update { it.copy(accounts = null) }
-        _state.update { it.copy(accounts = repository.getAccounts()) }
+        try {
+            _state.update { it.copy(accounts = repository.getAccounts()) }
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     data class State(

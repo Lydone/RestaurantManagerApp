@@ -3,6 +3,7 @@ package com.lydone.restaurantmanagerapp.ui.dish
 import android.content.Context
 import android.net.Uri
 import android.util.Base64
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.lydone.restaurantmanagerapp.Application
@@ -47,13 +48,18 @@ class DishesViewModel @Inject constructor(
         viewModelScope.launch {
             launch { loadDishes() }
             launch {
-                val categories = menuRepository.getCategories()
-                _state.update {
-                    it.copy(
-                        categories = categories,
-                        category = categories.firstOrNull(),
-                    )
+                try {
+                    val categories = menuRepository.getCategories()
+                    _state.update {
+                        it.copy(
+                            categories = categories,
+                            category = categories.firstOrNull(),
+                        )
+                    }
+                } catch (e: Exception) {
+                    Log.w("TAG", e)
                 }
+
             }
         }
     }
@@ -66,18 +72,30 @@ class DishesViewModel @Inject constructor(
     }
 
     fun addToStopList(dish: Dish) = viewModelScope.launch {
-        menuRepository.addToStopList(dish.id)
-        loadDishes()
+        try {
+            menuRepository.addToStopList(dish.id)
+            loadDishes()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     fun removeFromStopList(dish: Dish) = viewModelScope.launch {
-        menuRepository.removeFromStopList(dish.id)
-        loadDishes()
+        try {
+            menuRepository.removeFromStopList(dish.id)
+            loadDishes()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     fun deleteDish(dish: Dish) = viewModelScope.launch {
-        menuRepository.deleteDish(dish.id)
-        loadDishes()
+        try {
+            menuRepository.deleteDish(dish.id)
+            loadDishes()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     fun changeImage(value: Uri?) = _state.update { it.copy(image = value) }
@@ -99,31 +117,39 @@ class DishesViewModel @Inject constructor(
         getApplication<Application>().contentResolver.openInputStream(_state.value.image!!).use {
             imageBase64 = Base64.encodeToString(it!!.readBytes(), Base64.NO_WRAP)
         }
-        menuRepository.addDish(
-            AddDishRequest(
-                imageBase64,
-                state.name,
-                state.description,
-                state.price!!,
-                state.weight!!,
-                state.category!!.id,
+        try {
+            menuRepository.addDish(
+                AddDishRequest(
+                    imageBase64,
+                    state.name,
+                    state.description,
+                    state.price!!,
+                    state.weight!!,
+                    state.category!!.id,
+                )
             )
-        )
-        _state.update {
-            it.copy(
-                image = null,
-                name = "",
-                description = "",
-                price = null,
-                weight = null
-            )
+            _state.update {
+                it.copy(
+                    image = null,
+                    name = "",
+                    description = "",
+                    price = null,
+                    weight = null
+                )
+            }
+            loadDishes()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
         }
-        loadDishes()
     }
 
     private suspend fun loadDishes() {
-        dishes = menuRepository.getDishes().sortedBy(Dish::name)
-        _state.update { it.copy(dishes = filterDishes(it.searchText)) }
+        try {
+            dishes = menuRepository.getDishes().sortedBy(Dish::name)
+            _state.update { it.copy(dishes = filterDishes(it.searchText)) }
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     data class State(

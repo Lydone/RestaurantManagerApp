@@ -1,5 +1,6 @@
 package com.lydone.restaurantmanagerapp.ui.order
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lydone.restaurantmanagerapp.data.Order
@@ -31,14 +32,18 @@ class OrderViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val tables = tableRepository.getTables()
-            val table = tables.first()
-            _state.update {
-                it.copy(
-                    table = table,
-                    tables = tables,
-                    orders = orderRepository.getOrders(table.number)
-                )
+            try {
+                val tables = tableRepository.getTables()
+                val table = tables.first()
+                _state.update {
+                    it.copy(
+                        table = table,
+                        tables = tables,
+                        orders = orderRepository.getOrders(table.number)
+                    )
+                }
+            } catch (e: Exception) {
+                Log.w("TAG", e)
             }
         }
     }
@@ -46,7 +51,11 @@ class OrderViewModel @Inject constructor(
     fun changeTable(table: Table) {
         _state.update { it.copy(table = table, orders = null) }
         viewModelScope.launch {
-            _state.update { it.copy(orders = orderRepository.getOrders(table.number)) }
+            try {
+                _state.update { it.copy(orders = orderRepository.getOrders(table.number)) }
+            } catch (e: Exception) {
+                Log.w("TAG", e)
+            }
         }
     }
 
@@ -60,8 +69,12 @@ class OrderViewModel @Inject constructor(
 
     fun deleteEntry(entry: Order.Entry) {
         viewModelScope.launch {
-            orderRepository.deleteOrderEntry(entry.id)
-            _state.update { it.copy(orders = orderRepository.getOrders(it.table!!.number)) }
+            try {
+                orderRepository.deleteOrderEntry(entry.id)
+                _state.update { it.copy(orders = orderRepository.getOrders(it.table!!.number)) }
+            } catch (e: Exception) {
+                Log.w("TAG", e)
+            }
         }
     }
 

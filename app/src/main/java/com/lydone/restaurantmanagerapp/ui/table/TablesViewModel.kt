@@ -1,5 +1,6 @@
 package com.lydone.restaurantmanagerapp.ui.table
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lydone.restaurantmanagerapp.data.Table
@@ -23,8 +24,12 @@ class TablesViewModel @Inject constructor(private val tableRepository: TableRepo
     }
 
     fun deleteTable(table: Table) = viewModelScope.launch {
-        tableRepository.deleteTable(table.number)
-        loadTables()
+        try {
+            tableRepository.deleteTable(table.number)
+            loadTables()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     fun changeNumber(value: String) {
@@ -34,14 +39,22 @@ class TablesViewModel @Inject constructor(private val tableRepository: TableRepo
     }
 
     fun addTable() = viewModelScope.launch {
-        tableRepository.addTable(state.value.number.toInt())
-        _state.update { it.copy(number = "") }
-        loadTables()
+        try {
+            tableRepository.addTable(state.value.number.toInt())
+            _state.update { it.copy(number = "") }
+            loadTables()
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     private suspend fun loadTables() {
         _state.update { it.copy(tables = null) }
-        _state.update { it.copy(tables = tableRepository.getTables()) }
+        try {
+            _state.update { it.copy(tables = tableRepository.getTables()) }
+        } catch (e: Exception) {
+            Log.w("TAG", e)
+        }
     }
 
     data class State(val tables: List<Table>?, val number: String)

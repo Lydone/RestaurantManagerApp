@@ -46,13 +46,14 @@ import java.time.format.DateTimeFormatter
 fun OrderRoute(viewModel: OrderViewModel = hiltViewModel()) {
     val state = viewModel.state.collectAsState().value
     var deleteEntryDialog by remember { mutableStateOf<Order.Entry?>(null) }
+    var deleteOrderDialog by remember { mutableStateOf<Order?>(null) }
     TwoPaneScreen(
         leftContent = {
             Orders(
                 state = state,
                 onTableSelect = viewModel::changeTable,
                 onOrderClick = viewModel::setCurrentOrder,
-                onDeleteOrderClick = viewModel::deleteOrder,
+                onDeleteOrderClick = { deleteOrderDialog = it },
             )
         },
         rightContent = {
@@ -70,6 +71,14 @@ fun OrderRoute(viewModel: OrderViewModel = hiltViewModel()) {
             title = stringResource(R.string.delete_entry_placeholder, entry.dish.name),
             onDismiss = { deleteEntryDialog = null },
             onConfirm = { viewModel.deleteEntry(entry) })
+    }
+    deleteOrderDialog?.let { order ->
+        AlertDialog(
+            title = stringResource(R.string.delete_order_placeholder, order.id),
+            onDismiss = { deleteOrderDialog = null },
+            onConfirm = { viewModel.deleteOrder(order) },
+            text = "Это приведет к удалению заказа целиком. Если необходимо удалить конкретное блюдо, воспользуйтесь кнопкой удаления напротив блюда."
+        )
     }
 }
 
